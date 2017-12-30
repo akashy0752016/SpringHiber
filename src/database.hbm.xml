@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.akash.bean.Country" table="country">
+		<id name="id" type="int" length="50">
+			<column name="id" />
+			<generator class="native" />
+		</id>
+		<property name="country" type="string" column="country" length="50" not-null="true" />
+	</class>
+	<class name="com.akash.bean.State" table="state">
+		<id name="id" type="int" length="50">
+			<column name="id" />
+			<generator class="native" />
+		</id>
+		<many-to-one name="country" fetch="join" class="com.akash.bean.Country" column="country_id" not-null="true" cascade="all" />
+		<property name="state" type="string" column="state" length="50" not-null="true" />
+	</class>
+	<class name="com.akash.bean.City" table="city">
+		<id name="id" type="int" length="50">
+			<column name="id" />
+			<generator class="native" />
+		</id>
+		<many-to-one name="state" fetch="join" class="com.akash.bean.State" column="state_id" not-null="true" cascade="all" />
+		<property name="city" type="string" column="city" length="50" not-null="true" />
+	</class>
+	<class name="com.akash.bean.UserRoles" table="user_roles">
+		<id name="id" type="int" length="50">
+			<column name="id" />
+			<generator class="native" />
+		</id>
+		<property name="role" type="string" column="role" length="50" not-null="true" />
+	</class>
+	<class name="com.akash.bean.Users" table="users">
+		<id name="id" type="int" length="50">
+			<column name="id" />
+			<generator class="native" />
+		</id>
+		<many-to-one name="userRole" fetch="join" class="com.akash.bean.UserRoles" column="user_role_id" not-null="true" cascade="all" />
+		<property name="addharNumber" type="string" column="addhar_number" unique="true" length="50" not-null="true" />
+		<property name="salutation" type="string" column="salutation" length="10" not-null="false" />
+		<property name="firstName" type="string" column="first_name" length="255" not-null="true" />
+		<property name="middleName" type="string" column="middle_name" length="255" not-null="false" />
+		<property name="lastName" type="string" column="last_name" length="255" not-null="true" />
+		<property name="gender" type="string" column="gender" length="50" not-null="true" />
+		<property name="mobileNumber" type="string" column="mobile_number" length="20" not-null="true" />
+		<property name="email" type="string" column="email" length="255" not-null="true" />
+		<property name="password" type="string" column="password" length="255" not-null="true" />
+		<property name="addressLine1" type="string" column="address_line_1" length="500" not-null="false" />
+		<property name="addressLine2" type="string" column="address_line_2" length="500" not-null="false" />
+		<many-to-one name="city" fetch="join" class="com.akash.bean.City" column="city_id" not-null="true" cascade="all" />
+		<many-to-one name="state" fetch="join" class="com.akash.bean.State" column="state_id" not-null="true" cascade="all" />
+		<many-to-one name="country" fetch="join" class="com.akash.bean.Country" column="country_id" not-null="true" cascade="all" />
+		<property name="pinCode" type="string" column="pincode" length="6" not-null="false" />
+	</class>
+	<class name="com.akash.bean.BusinessCategory" table="business_categories">
+		<id name="id" type="int" length="50">
+			<column name="id" />
+			<generator class="native" />
+		</id>
+		<many-to-one name="parent" fetch="join" class="com.akash.bean.BusinessCategory" column="parent_id" cascade="all" not-null="true" />
+		<property name="title" type="string" length="255" column="title" not-null="true" />
+		<property name="description" type="string" length="1000" column="description" not-null="false" />
+		<property name="image" type="string" length="255" column="image" not-null="false" />
+		<property name="blocked" type="boolean" column="is_blocked" not-null="true" />
+	</class>
+	<class name="com.akash.bean.Business" table="businesses">
+		<id name="id" type="int" length="50">
+			<column name="id" />
+			<generator class="native" />
+		</id>
+		<many-to-one name="user" fetch="join" class="com.akash.bean.Users" column="user_id" unique="true" not-null="true" cascade="all" />
+		<property name="businessTitle" type="string" length="255" column="title" />
+		<property name="businessKeywords" type="string" column="keywords" length="255" />
+		<property name="aboutUs" type="string" length="1000" column="about_us" />
+		<property name="website" type="string" length="255" column="website" />
+		<property name="banner" type="string" length="255" column="banner" />
+		<property name="businessLogo" type="string" length="255" column="logo" />
+	</class>
+	<class name="com.akash.bean.EventCategory" table="event_categories">
+		<id name="id" type="int" length="50">
+			<column name="id" />
+			<generator class="native" />
+		</id>
+		<property name="title" type="string" length="255" column="title" not-null="true" />
+		<property name="description" type="string" length="1000" column="description" not-null="false" />
+		<property name="image" type="string" length="255" column="image" not-null="false" />
+		<property name="blocked" type="boolean" column="is_blocked" not-null="true" />
+	</class>
+	<class name="com.akash.bean.BusinessEvent" table="business_events">
+		<id name="id" type="int" length="50">
+			<column name="id" />
+			<generator class="native" />
+		</id>
+		<many-to-one name="user" fetch="join" class="com.akash.bean.Users" column="user_id" not-null="true" cascade="all" />
+		<many-to-one name="business" fetch="join" class="com.akash.bean.Business" column="business_id" not-null="true" cascade="all" />
+		<many-to-one name="eventCategory" fetch="join" class="com.akash.bean.EventCategory" column="event_category_id" not-null="true" cascade="all" />
+		<property name="name" type="string" length="255" column="name" not-null="true" />
+		<property name="keywords" type="string" length="255" not-null="true" column="keywords" />
+		<property name="description" type="string" length="1000" not-null="true" column="description" />
+		<property name="organizerName" type="string" length="255" not-null="true" column="organizer_name" />
+		<property name="startDate" type="java.sql.Timestamp" column="start_date_time" not-null="false" />
+		<property name="endDate" type="java.sql.Timestamp" column="end_date_time" not-null="false" />
+		<property name="banner" type="string" length="255" column="banner" not-null="true" />
+		<property name="address" type="string" length="255" column="address" not-null="true" />
+		<many-to-one name="city" fetch="join" class="com.akash.bean.City" column="city_id" not-null="true" cascade="all" />
+		<many-to-one name="state" fetch="join" class="com.akash.bean.State" column="state_id" not-null="true" cascade="all" />
+		<many-to-one name="country" fetch="join" class="com.akash.bean.Country" column="country_id" not-null="true" cascade="all" />
+		<property name="pinCode" type="string" length="10" column="pincode" not-null="true" />
+		<property name="totalSeats" type="int" length="11" column="total_seats" not-null="false" />
+		<property name="blocked" type="boolean" column="is_blocked" not-null="true" />
+	</class>
+</hibernate-mapping>
